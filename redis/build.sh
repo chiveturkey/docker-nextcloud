@@ -8,8 +8,8 @@ done < ../etc/nextcloud.config
 docker build \
   --no-cache -t redis .
 
-docker run -\
-  d \
+docker run \
+  -d \
   --name redis \
   -h redis \
   --network=nextcloud \
