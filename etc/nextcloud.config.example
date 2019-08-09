@@ -1,0 +1,6 @@
+mysql_root_password='rootpassword'
+mysql_nextcloud_password='nextcloudpassword'
+nextcloud_admin_user='admin'
+nextcloud_admin_password='adminpassword'
+nextcloud_url='nextcloud.test'
+nextcloud_ip='192.168.100.1'
