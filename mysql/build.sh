@@ -32,11 +32,11 @@ docker run \
 
 # Temporarily enable mysql server.
 docker run \
-  --rm \
   -d \
   --mount type=volume,source=mysql,destination=/var/lib/mysql \
   --name mysql \
   -h mysql \
+  --network=nextcloud \
   mysql \
   /usr/bin/mysqld_safe
 
@@ -67,10 +67,4 @@ docker exec \
 docker exec -it mysql /usr/bin/mysqladmin -u root --password=$mysql_root_password shutdown
 
 # Enable mysql server.
-docker run \
-  -d \
-  --mount type=volume,source=mysql,destination=/var/lib/mysql \
-  --name mysql \
-  -h mysql \
-  --network=nextcloud \
-  mysql
+docker container start mysql
