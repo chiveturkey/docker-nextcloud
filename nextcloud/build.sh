@@ -49,6 +49,12 @@ docker exec docker-nextcloud-nextcloud bash -c " \
   && echo \"      ),\"                                      >> /var/www/html/nextcloud/config/config.php \
   && echo \");\"                                            >> /var/www/html/nextcloud/config/config.php"
 
+# Put .htaccess and config.php.sample back in place.
+docker exec docker-nextcloud-nextcloud bash -c " \
+  cp /tmp/.htaccess /tmp/config.php.sample /var/www/html/nextcloud/config \
+  && chown -R apache:apache /var/www/html/nextcloud/config \
+  && rm -f /tmp/.htaccess /tmp/config.php.sample"
+
 # TODO: HACKTAG: There's some sort of race condition that causes this to fail if it executes too
 # soon.  It would be better to watch output from `docker ps` or something.
 sleep 5
