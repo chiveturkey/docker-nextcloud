@@ -37,8 +37,7 @@ docker run \
   --name mysql \
   -h mysql \
   --network=nextcloud \
-  mysql \
-  /usr/bin/mysqld_safe
+  mysql
 
 # HACKTAG: Should find a better way to do this.
 # Give the mysql server time to come up.
@@ -65,6 +64,10 @@ docker exec \
 
 # Stop mysql server.
 docker exec -it mysql /usr/bin/mysqladmin -u root --password=$mysql_root_password shutdown
+
+# TODO: HACKTAG: There's some sort of race condition that causes this to fail if it executes too
+# soon.  It would be better to watch output from `docker ps` or something.
+sleep 5
 
 # Enable mysql server.
 docker container start mysql
