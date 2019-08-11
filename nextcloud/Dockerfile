@@ -40,7 +40,7 @@ RUN wget -nv https://download.nextcloud.com/server/releases/nextcloud-16.0.3.tar
   && gpg --import nextcloud.asc \
   && gpg --verify nextcloud-16.0.3.tar.bz2.asc nextcloud-16.0.3.tar.bz2 \
   && tar -xjvf nextcloud-16.0.3.tar.bz2 -C /var/www/html \
-  && cp /var/www/html/nextcloud/config/config.php.sample /var/www/html/nextcloud/config/.htaccess /tmp \
+  && cp /var/www/html/nextcloud/config/config.sample.php /var/www/html/nextcloud/config/.htaccess /tmp \
   && rm -rf /var/www/html/nextcloud/config \
   && chown -R apache:apache /var/www/html/nextcloud \
   && mkdir /nextcloud \
