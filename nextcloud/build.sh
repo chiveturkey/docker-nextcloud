@@ -7,6 +7,7 @@ done < ../etc/nextcloud.config
 
 # Build docker-nextcloud-nextcloud image.
 docker build \
+  --build-arg nextcloud_version=$nextcloud_version
   --no-cache -t docker-nextcloud-nextcloud .
 
 # Build docker-nextcloud-nextcloud volume.
