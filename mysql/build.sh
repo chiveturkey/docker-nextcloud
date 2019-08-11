@@ -58,9 +58,9 @@ docker exec \
 docker exec \
   docker-nextcloud-mysql /usr/bin/mysql -u root --password=$mysql_root_password \
     -e "CREATE DATABASE nextcloud; \
-        CREATE USER 'nextcloud'@'nextcloud.nextcloud' IDENTIFIED BY '$mysql_nextcloud_password'; \
-        GRANT ALL ON nextcloud.* TO 'nextcloud'@'nextcloud.nextcloud'; \
-        GRANT USAGE ON *.* TO 'nextcloud'@'nextcloud.nextcloud';"
+        CREATE USER 'nextcloud'@'docker-nextcloud-nextcloud.nextcloud' IDENTIFIED BY '$mysql_nextcloud_password'; \
+        GRANT ALL ON nextcloud.* TO 'nextcloud'@'docker-nextcloud-nextcloud.nextcloud'; \
+        GRANT USAGE ON *.* TO 'nextcloud'@'docker-nextcloud-nextcloud.nextcloud';"
 
 # Stop mysql server.
 docker exec -it docker-nextcloud-mysql /usr/bin/mysqladmin -u root --password=$mysql_root_password shutdown
