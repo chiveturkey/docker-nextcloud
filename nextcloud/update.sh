@@ -13,7 +13,7 @@ docker run \
   --mount type=volume,source=docker-nextcloud-nextcloud,destination=/nextcloud \
   --name docker-nextcloud-nextcloud \
   -h nextcloud \
-  --network=docker-nextcloud \
+  --network=nextcloud \
   -p $nextcloud_ip:80:80 \
   docker-nextcloud-nextcloud
 
