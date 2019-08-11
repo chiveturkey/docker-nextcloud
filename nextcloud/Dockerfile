@@ -1,5 +1,7 @@
 FROM centos:7
 
+ARG nextcloud_version
+
 # Update and install some useful packages.
 RUN yum update -y && \
   yum install -y bzip2 \
@@ -32,14 +34,14 @@ RUN yum install -y rh-php72 \
   && ln -s /opt/rh/rh-php72/root/bin/php /usr/bin/php
 
 # Install Nextcloud.
-RUN wget -nv https://download.nextcloud.com/server/releases/nextcloud-16.0.3.tar.bz2 \
-  && wget -nv https://download.nextcloud.com/server/releases/nextcloud-16.0.3.tar.bz2.sha256 \
-  && sha256sum -c nextcloud-16.0.3.tar.bz2.sha256 < nextcloud-16.0.3.tar.bz2 \
-  && wget -nv https://download.nextcloud.com/server/releases/nextcloud-16.0.3.tar.bz2.asc \
+RUN wget -nv https://download.nextcloud.com/server/releases/nextcloud-$nextcloud_version.tar.bz2 \
+  && wget -nv https://download.nextcloud.com/server/releases/nextcloud-$nextcloud_version.tar.bz2.sha256 \
+  && sha256sum -c nextcloud-$nextcloud_version.tar.bz2.sha256 < nextcloud-$nextcloud_version.tar.bz2 \
+  && wget -nv https://download.nextcloud.com/server/releases/nextcloud-$nextcloud_version.tar.bz2.asc \
   && wget -nv https://nextcloud.com/nextcloud.asc \
   && gpg --import nextcloud.asc \
-  && gpg --verify nextcloud-16.0.3.tar.bz2.asc nextcloud-16.0.3.tar.bz2 \
-  && tar -xjvf nextcloud-16.0.3.tar.bz2 -C /var/www/html \
+  && gpg --verify nextcloud-$nextcloud_version.tar.bz2.asc nextcloud-$nextcloud_version.tar.bz2 \
+  && tar -xjvf nextcloud-$nextcloud_version.tar.bz2 -C /var/www/html \
   && cp /var/www/html/nextcloud/config/config.sample.php /var/www/html/nextcloud/config/.htaccess /tmp \
   && rm -rf /var/www/html/nextcloud/config \
   && chown -R apache:apache /var/www/html/nextcloud \
