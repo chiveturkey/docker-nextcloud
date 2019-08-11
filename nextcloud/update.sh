@@ -6,7 +6,7 @@ do
 done < nextcloud.config
 
 docker build \
-  --build-arg nextcloud_version=$nextcloud_version
+  --build-arg nextcloud_version=$nextcloud_version \
   --no-cache -t docker-nextcloud-nextcloud .
 
 docker run \
