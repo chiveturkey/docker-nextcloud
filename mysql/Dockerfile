@@ -6,6 +6,9 @@ RUN yum update -y && \
     mariadb \
     mariadb-server
 
+# Copy over Nextcloud-specific MySQL requirements.
+COPY nextcloud.cnf /etc/my.cnf.d
+
 # Setup mysql user.
 RUN export uid=27 gid=27 && \
   echo "mysql:x:${uid}:${gid}:MariaDB Server:/var/lib/mysql:/sbin/nologin" >> /etc/passwd && \
