@@ -1,5 +1,13 @@
 #!/usr/bin/bash
 
+# Master build script.
+
+# Fail if 'etc/nextcloud.config' is not present.
+if [[ ! -f etc/nextcloud.config ]] ; then
+    echo "File 'etc/nextcloud.config' is not present.  Aborting."
+    exit
+fi
+
 # Create Docker Nextcloud network.
 docker network \
   create \
