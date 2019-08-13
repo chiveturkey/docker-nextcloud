@@ -6,6 +6,14 @@ docker network \
   -d bridge \
   nextcloud
 
+# Create redis image.
+cd redis
+./build.sh
+
+# Create mysql image.
+cd ../mysql
+./build.sh
+
 # Create nextcloud image.
-cd nextcloud
+cd ../nextcloud
 ./build.sh

@@ -4,12 +4,22 @@ Run NextCloud in CentOS Docker containers.
 
 ## How It Works
 
-Create several Docker containers and...
+Beginning with the CentOS minimal Docker image, build images for MySQL, Redis, and the NextCloud application itself.
 
 ## How To
 
-* Create the network
+* Clone this repository.
+
+* Change directory to the repository.
 
 ```
-docker network create -d bridge nextcloud
+cd /path/to/docker-nextcloud
+```
+
+* Create `etc/nextcloud.config`.  `etc/nextcloud.config.example` is provided for reference, but SHOULD NOT be used.
+
+* Run the master `build.sh` shell script.
+
+```
+./build.sh
 ```
