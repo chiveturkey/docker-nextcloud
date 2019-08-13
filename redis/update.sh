@@ -1,5 +1,9 @@
 #!/usr/bin/bash
 
+# Ensure container is stopped and deleted before updating.
+docker container stop docker-nextcloud-redis
+docker container rm docker-nextcloud-redis
+
 while IFS='=' read -r name value
 do
   export $name=${value//\'/}
