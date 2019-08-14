@@ -9,9 +9,9 @@ if [[ ! -f etc/nextcloud.config ]] ; then
 fi
 
 # Stop services.
-docker container stop docker-nextcloud-nextcloud
-docker container stop docker-nextcloud-mysql
-docker container stop docker-nextcloud-redis
+docker container stop -t 30 docker-nextcloud-nextcloud
+docker container stop -t 30 docker-nextcloud-mysql
+docker container stop -t 30 docker-nextcloud-redis
 
 # Create redis image.
 cd redis
