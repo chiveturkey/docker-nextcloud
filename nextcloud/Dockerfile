@@ -17,7 +17,7 @@ COPY index.html /var/www/html/default
 # Copy vhost definitions.
 COPY 00-default.conf nextcloud.conf /etc/httpd/conf.d/
 
-# Install PHP.
+# Install and configure PHP.
 RUN yum install -y rh-php72 \
   rh-php72-php \
   rh-php72-php-gd \
@@ -31,7 +31,11 @@ RUN yum install -y rh-php72 \
   && ln -s /opt/rh/httpd24/root/etc/httpd/conf.d/rh-php72-php.conf /etc/httpd/conf.d/ \
   && ln -s /opt/rh/httpd24/root/etc/httpd/conf.modules.d/15-rh-php72-php.conf /etc/httpd/conf.modules.d/ \
   && ln -s /opt/rh/httpd24/root/etc/httpd/modules/librh-php72-php7.so /etc/httpd/modules/ \
-  && ln -s /opt/rh/rh-php72/root/bin/php /usr/bin/php
+  && ln -s /opt/rh/rh-php72/root/bin/php /usr/bin/php \
+  && sed -i -e 's/memory_limit = 128M/memory_limit = 512M/'                                /etc/opt/rh/rh-php72/php.ini \
+  && sed -i -e 's/opcache.max_accelerated_files=4000/opcache.max_accelerated_files=10000/' /etc/opt/rh/rh-php72/php.d/10-opcache.ini \
+  && sed -i -e 's/;opcache.save_comments=1/opcache.save_comments=1/'                       /etc/opt/rh/rh-php72/php.d/10-opcache.ini \
+  && sed -i -e 's/;opcache.revalidate_freq=2/opcache.revalidate_freq=1/'                   /etc/opt/rh/rh-php72/php.d/10-opcache.ini
 
 # Install Nextcloud.
 RUN wget -nv https://download.nextcloud.com/server/releases/nextcloud-$nextcloud_version.tar.bz2 \
