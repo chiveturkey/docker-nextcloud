@@ -40,11 +40,6 @@ fi
 # soon.  It would be better to watch output from `docker ps` or something.
 sleep 5
 
-# Setup external storage mount if 'use_external_storage' is 'true'.
-if [ "$use_external_storage" = 'true' ]; then
-  docker exec docker-nextcloud-nextcloud sudo -u apache php /var/www/html/nextcloud/occ app:enable files_external
-fi
-
 # Link up volume in container.
 docker exec docker-nextcloud-nextcloud bash -c " \
   mkdir /nextcloud/config \
@@ -67,6 +62,11 @@ docker exec docker-nextcloud-nextcloud bash -c " \
   && echo \"        'port' => 6379,\"                       >> /var/www/html/nextcloud/config/config.php \
   && echo \"      ),\"                                      >> /var/www/html/nextcloud/config/config.php \
   && echo \");\"                                            >> /var/www/html/nextcloud/config/config.php"
+
+# Setup external storage mount if 'use_external_storage' is 'true'.
+if [ "$use_external_storage" = 'true' ]; then
+  docker exec docker-nextcloud-nextcloud sudo -u apache php /var/www/html/nextcloud/occ app:enable files_external
+fi
 
 # Put .htaccess and config.php.sample back in place.
 docker exec docker-nextcloud-nextcloud bash -c " \
