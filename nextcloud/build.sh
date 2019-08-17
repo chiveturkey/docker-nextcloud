@@ -14,18 +14,35 @@ docker build \
 docker volume create docker-nextcloud-nextcloud
 
 # Temporarily enable nextcloud application.
-docker run \
-  -d \
-  --mount type=volume,source=docker-nextcloud-nextcloud,destination=/nextcloud \
-  --name docker-nextcloud-nextcloud \
-  -h nextcloud \
-  --network=nextcloud \
-  -p $nextcloud_ip:80:80 \
-  docker-nextcloud-nextcloud
+# Setup external storage mount if 'use_external_storage' is 'true'.
+if [ "$use_external_storage" = 'true' ]; then
+  docker run \
+    -d \
+    --mount type=volume,source=docker-nextcloud-nextcloud,destination=/nextcloud \
+    --mount type=bind,source=$external_storage_directory,destination=/externalstorage \
+    --name docker-nextcloud-nextcloud \
+    -h nextcloud \
+    --network=nextcloud \
+    -p $nextcloud_ip:80:80 \
+    docker-nextcloud-nextcloud
+else
+  docker run \
+    -d \
+    --mount type=volume,source=docker-nextcloud-nextcloud,destination=/nextcloud \
+    --name docker-nextcloud-nextcloud \
+    -h nextcloud \
+    --network=nextcloud \
+    -p $nextcloud_ip:80:80 \
+    docker-nextcloud-nextcloud
+fi
 
 # TODO: HACKTAG: There's some sort of race condition that causes this to fail if it executes too
 # soon.  It would be better to watch output from `docker ps` or something.
 sleep 5
+
+# Setup external storage mount if 'use_external_storage' is 'true'.
+if [ "$use_external_storage" = 'true' ]; then
+docker exec docker-nextcloud-nextcloud sudo -u apache php /var/www/html/nextcloud/occ app:enable files_external
 
 # Link up volume in container.
 docker exec docker-nextcloud-nextcloud bash -c " \
