@@ -6,8 +6,8 @@ do
 done < ../etc/nextcloud.config
 
 # Set default values if variables not present.
-$nextcloud_url="${nextcloud_url:-nextcloud.test}"
-$nextcloud_version="${nextcloud_version:-16.0.3}"
+nextcloud_url="${nextcloud_url:-nextcloud.test}"
+nextcloud_version="${nextcloud_version:-16.0.3}"
 
 # Build docker-nextcloud-nextcloud image.
 docker build \
