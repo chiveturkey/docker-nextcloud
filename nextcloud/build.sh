@@ -66,6 +66,11 @@ docker exec docker-nextcloud-nextcloud bash -c " \
 # Setup external storage mount if 'use_external_storage' is 'true'.
 if [ "$use_external_storage" = 'true' ]; then
   docker exec docker-nextcloud-nextcloud sudo -u apache php /var/www/html/nextcloud/occ app:enable files_external
+  docker exec docker-nextcloud-nextcloud sudo -u apache php /var/www/html/nextcloud/occ files_external:create \
+    -c datadir=/externalstorage
+    Photos \
+    local \
+    null::null
 fi
 
 # Put .htaccess and config.php.sample back in place.
