@@ -1,5 +1,6 @@
 FROM centos:7
 
+ARG nextcloud_url
 ARG nextcloud_version
 
 # Update and install some useful packages.
@@ -18,6 +19,9 @@ COPY index.html /var/www/html/default
 # Copy vhost definitions.
 COPY 00-default.conf nextcloud.conf /etc/httpd/conf.d/
 
+# Replace $nextcloud_url in vhost definition (or do nothing if the value is the default).
+RUN sed -e "s/nextcloud.test/$nextcloud_url/" /etc/httpd/conf.d/nextcloud.conf
+
 # Setup SSL.
 RUN openssl req \
   -new \
@@ -26,10 +30,10 @@ RUN openssl req \
   -sha256 \
   -days 3650 \
   -nodes \
-  -subj "/C=US/ST=Denial/L=Springfield/O=Dis/CN=nextcloud.test" \
-  -out /etc/pki/tls/certs/nextcloud.test.crt \
-  -keyout /etc/pki/tls/private/nextcloud.test.key \
-  && chmod 600 /etc/pki/tls/certs/nextcloud.test.crt /etc/pki/tls/private/nextcloud.test.key
+  -subj "/C=US/ST=Denial/L=Springfield/O=Dis/CN=$nextcloud_url" \
+  -out /etc/pki/tls/certs/$nextcloud_url.crt \
+  -keyout /etc/pki/tls/private/$nextcloud_url.key \
+  && chmod 600 /etc/pki/tls/certs/$nextcloud_url.crt /etc/pki/tls/private/$nextcloud_url.key
 
 # Install and configure PHP.
 RUN yum install -y rh-php72 \

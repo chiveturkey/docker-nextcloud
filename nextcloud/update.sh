@@ -9,7 +9,13 @@ do
   export $name=${value//\'/}
 done < ../etc/nextcloud.config
 
+# Set default values if variables not present.
+$nextcloud_url="${nextcloud_url:-nextcloud.test}"
+$nextcloud_version="${nextcloud_version:-16.0.3}"
+
+# Build docker-nextcloud-nextcloud image.
 docker build \
+  --build-arg nextcloud_url=$nextcloud_url \
   --build-arg nextcloud_version=$nextcloud_version \
   --no-cache -t docker-nextcloud-nextcloud .
 
