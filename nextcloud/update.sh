@@ -23,6 +23,7 @@ if [ "$use_external_storage" = 'true' ]; then
     -h nextcloud \
     --network=nextcloud \
     -p $nextcloud_ip:80:80 \
+    -p $nextcloud_ip:443:443 \
     docker-nextcloud-nextcloud
 else
   docker run \
@@ -32,6 +33,7 @@ else
     -h nextcloud \
     --network=nextcloud \
     -p $nextcloud_ip:80:80 \
+    -p $nextcloud_ip:443:443 \
     docker-nextcloud-nextcloud
 fi
 

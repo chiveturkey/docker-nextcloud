@@ -7,6 +7,7 @@ RUN yum update -y && \
   yum install -y bzip2 \
     centos-release-scl \
     httpd \
+    mod_ssl \
     sudo \
     wget
 
@@ -16,6 +17,19 @@ COPY index.html /var/www/html/default
 
 # Copy vhost definitions.
 COPY 00-default.conf nextcloud.conf /etc/httpd/conf.d/
+
+# Setup SSL.
+RUN openssl req \
+  -new \
+  -newkey rsa:4096 \
+  -x509 \
+  -sha256 \
+  -days 3650 \
+  -nodes \
+  -subj "/C=US/ST=Denial/L=Springfield/O=Dis/CN=nextcloud.test" \
+  -out /etc/pki/tls/certs/nextcloud.test.crt \
+  -keyout /etc/pki/tls/private/nextcloud.test.key \
+  && chmod 600 /etc/pki/tls/certs/nextcloud.test.crt /etc/pki/tls/private/nextcloud.test.key
 
 # Install and configure PHP.
 RUN yum install -y rh-php72 \
