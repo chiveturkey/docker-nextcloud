@@ -20,7 +20,7 @@ COPY index.html /var/www/html/default
 COPY 00-default.conf nextcloud.conf /etc/httpd/conf.d/
 
 # Replace $nextcloud_url in vhost definition (or do nothing if the value is the default).
-RUN sed -e "s/nextcloud.test/${nextcloud_url}/" /etc/httpd/conf.d/nextcloud.conf
+RUN sed -i "s/nextcloud.test/$nextcloud_url/" /etc/httpd/conf.d/nextcloud.conf
 
 # Setup SSL.
 RUN openssl req \
