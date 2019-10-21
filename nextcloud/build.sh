@@ -80,6 +80,11 @@ if [ "$use_external_storage" = 'true' ]; then
     null::null
 fi
 
+# Setup trusted_proxies if 'use_reverse_proxy' is 'true'.
+if [ "$use_external_storage" = 'true' ]; then
+  docker exec docker-nextcloud-nextcloud sudo -u apache php /var/www/html/nextcloud/occ config:system:set trusted_proxies 0 --value=$reverse_proxy_ip
+fi
+
 # Put .htaccess and config.php.sample back in place.
 docker exec docker-nextcloud-nextcloud bash -c " \
   cp /tmp/.htaccess /tmp/config.sample.php /var/www/html/nextcloud/config \
