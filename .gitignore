@@ -1,1 +1,3 @@
 /etc/nextcloud.config
+/nextcloud/*.crt
+/nextcloud/*.key

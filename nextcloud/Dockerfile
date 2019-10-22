@@ -23,17 +23,8 @@ COPY 00-default.conf nextcloud.conf /etc/httpd/conf.d/
 RUN sed -i "s/nextcloud.test/$nextcloud_url/" /etc/httpd/conf.d/nextcloud.conf
 
 # Setup SSL.
-RUN openssl req \
-  -new \
-  -newkey rsa:4096 \
-  -x509 \
-  -sha256 \
-  -days 3650 \
-  -nodes \
-  -subj "/C=US/ST=Denial/L=Springfield/O=Dis/CN=$nextcloud_url" \
-  -out /etc/pki/tls/certs/$nextcloud_url.crt \
-  -keyout /etc/pki/tls/private/$nextcloud_url.key \
-  && chmod 600 /etc/pki/tls/certs/$nextcloud_url.crt /etc/pki/tls/private/$nextcloud_url.key
+COPY $nextcloud_url.crt /etc/pki/tls/certs
+COPY $nextcloud_url.key /etc/pki/tls/private
 
 # Install and configure PHP.
 RUN yum install -y rh-php72 \

@@ -9,6 +9,19 @@ done < ../etc/nextcloud.config
 nextcloud_url="${nextcloud_url:-nextcloud.test}"
 nextcloud_version="${nextcloud_version:-16.0.3}"
 
+# Create self-signed SSL certs.
+openssl req \
+  -new \
+  -newkey rsa:4096 \
+  -x509 \
+  -sha256 \
+  -days 3650 \
+  -nodes \
+  -subj "/C=US/ST=Denial/L=Springfield/O=Dis/CN=$nextcloud_url" \
+  -out $nextcloud_url.crt \
+  -keyout $nextcloud_url.key \
+  && chmod 600 $nextcloud_url.crt $nextcloud_url.key
+
 # Build docker-nextcloud-nextcloud image.
 docker build \
   --build-arg nextcloud_url=$nextcloud_url \
