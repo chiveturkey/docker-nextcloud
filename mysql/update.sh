@@ -3,6 +3,7 @@
 # Ensure container is stopped and deleted before updating.
 docker container stop docker-nextcloud-mysql
 docker container rm docker-nextcloud-mysql
+docker image rm docker-nextcloud-mysql
 
 while IFS='=' read -r name value
 do

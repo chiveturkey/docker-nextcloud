@@ -3,6 +3,7 @@
 # Ensure container is stopped and deleted before updating.
 docker container stop docker-nextcloud-nextcloud
 docker container rm docker-nextcloud-nextcloud
+docker image rm docker-nextcloud-nextcloud
 
 while IFS='=' read -r name value
 do
@@ -10,8 +11,8 @@ do
 done < ../etc/nextcloud.config
 
 # Set default values if variables not present.
-$nextcloud_url="${nextcloud_url:-nextcloud.test}"
-$nextcloud_version="${nextcloud_version:-16.0.3}"
+nextcloud_url="${nextcloud_url:-nextcloud.test}"
+nextcloud_version="${nextcloud_version:-16.0.3}"
 
 # Build docker-nextcloud-nextcloud image.
 docker build \
