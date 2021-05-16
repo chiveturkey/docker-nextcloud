@@ -27,24 +27,24 @@ COPY $nextcloud_url.crt /etc/pki/tls/certs
 COPY $nextcloud_url.key /etc/pki/tls/private
 
 # Install and configure PHP.
-RUN yum install -y rh-php72 \
-  rh-php72-php \
-  rh-php72-php-gd \
-  rh-php72-php-mbstring \
-  rh-php72-php-intl \
-  rh-php72-php-pecl-apcu \
-  rh-php72-php-mysqlnd \
-  rh-php72-php-pecl-redis \
-  rh-php72-php-opcache \
-  rh-php72-php-imagick \
-  && ln -s /opt/rh/httpd24/root/etc/httpd/conf.d/rh-php72-php.conf /etc/httpd/conf.d/ \
-  && ln -s /opt/rh/httpd24/root/etc/httpd/conf.modules.d/15-rh-php72-php.conf /etc/httpd/conf.modules.d/ \
-  && ln -s /opt/rh/httpd24/root/etc/httpd/modules/librh-php72-php7.so /etc/httpd/modules/ \
-  && ln -s /opt/rh/rh-php72/root/bin/php /usr/bin/php \
-  && sed -i -e 's/memory_limit = 128M/memory_limit = 512M/'                                /etc/opt/rh/rh-php72/php.ini \
-  && sed -i -e 's/opcache.max_accelerated_files=4000/opcache.max_accelerated_files=10000/' /etc/opt/rh/rh-php72/php.d/10-opcache.ini \
-  && sed -i -e 's/;opcache.save_comments=1/opcache.save_comments=1/'                       /etc/opt/rh/rh-php72/php.d/10-opcache.ini \
-  && sed -i -e 's/;opcache.revalidate_freq=2/opcache.revalidate_freq=1/'                   /etc/opt/rh/rh-php72/php.d/10-opcache.ini
+RUN yum install -y rh-php73 \
+  rh-php73-php \
+  rh-php73-php-gd \
+  rh-php73-php-mbstring \
+  rh-php73-php-intl \
+  rh-php73-php-pecl-apcu \
+  rh-php73-php-mysqlnd \
+  rh-php73-php-pecl-redis \
+  rh-php73-php-opcache \
+  rh-php73-php-imagick \
+  && ln -s /opt/rh/httpd24/root/etc/httpd/conf.d/rh-php73-php.conf /etc/httpd/conf.d/ \
+  && ln -s /opt/rh/httpd24/root/etc/httpd/conf.modules.d/15-rh-php73-php.conf /etc/httpd/conf.modules.d/ \
+  && ln -s /opt/rh/httpd24/root/etc/httpd/modules/librh-php73-php7.so /etc/httpd/modules/ \
+  && ln -s /opt/rh/rh-php73/root/bin/php /usr/bin/php \
+  && sed -i -e 's/memory_limit = 128M/memory_limit = 512M/'                                /etc/opt/rh/rh-php73/php.ini \
+  && sed -i -e 's/opcache.max_accelerated_files=4000/opcache.max_accelerated_files=10000/' /etc/opt/rh/rh-php73/php.d/10-opcache.ini \
+  && sed -i -e 's/;opcache.save_comments=1/opcache.save_comments=1/'                       /etc/opt/rh/rh-php73/php.d/10-opcache.ini \
+  && sed -i -e 's/;opcache.revalidate_freq=2/opcache.revalidate_freq=1/'                   /etc/opt/rh/rh-php73/php.d/10-opcache.ini
 
 # Install Nextcloud.
 RUN wget -nv https://download.nextcloud.com/server/releases/nextcloud-$nextcloud_version.tar.bz2 \
