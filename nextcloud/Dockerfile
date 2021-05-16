@@ -30,13 +30,13 @@ COPY $nextcloud_url.key /etc/pki/tls/private
 RUN yum install -y rh-php73 \
   rh-php73-php \
   rh-php73-php-gd \
-  rh-php73-php-mbstring \
-  rh-php73-php-intl \
-  rh-php73-php-pecl-apcu \
-  rh-php73-php-mysqlnd \
-  rh-php73-php-pecl-redis \
-  rh-php73-php-opcache \
   rh-php73-php-imagick \
+  rh-php73-php-intl \
+  rh-php73-php-mbstring \
+  rh-php73-php-mysqlnd \
+  rh-php73-php-opcache \
+  rh-php73-php-pecl-apcu \
+  rh-php73-php-pecl-redis \
   && ln -s /opt/rh/httpd24/root/etc/httpd/conf.d/rh-php73-php.conf /etc/httpd/conf.d/ \
   && ln -s /opt/rh/httpd24/root/etc/httpd/conf.modules.d/15-rh-php73-php.conf /etc/httpd/conf.modules.d/ \
   && ln -s /opt/rh/httpd24/root/etc/httpd/modules/librh-php73-php7.so /etc/httpd/modules/ \
