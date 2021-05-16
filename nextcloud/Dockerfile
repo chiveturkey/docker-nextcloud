@@ -29,7 +29,9 @@ COPY $nextcloud_url.key /etc/pki/tls/private
 # Install and configure PHP.
 RUN yum install -y rh-php73 \
   rh-php73-php \
+  rh-php73-php-bcmath \
   rh-php73-php-gd \
+  rh-php73-php-gmp \
   rh-php73-php-imagick \
   rh-php73-php-intl \
   rh-php73-php-mbstring \
