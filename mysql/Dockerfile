@@ -11,6 +11,11 @@ RUN wget -O /etc/pki/rpm-gpg/MariaDB-Server-GPG-KEY https://downloads.mariadb.co
 # Copy over MariaDB repo file.
 COPY mariadb.repo /etc/yum.repos.d/
 
+# Setup mysql user.
+RUN export uid=27 gid=27 && \
+  echo "mysql:x:${uid}:${gid}:MariaDB Server:/var/lib/mysql:/sbin/nologin" >> /etc/passwd && \
+  echo "mysql:x:${uid}:" >> /etc/group
+
 # Install MariaDB.
 RUN yum install -y \
   MariaDB-client \
@@ -18,10 +23,5 @@ RUN yum install -y \
 
 # Copy over Nextcloud-specific MySQL requirements.
 COPY nextcloud.cnf /etc/my.cnf.d
-
-# Setup mysql user.
-RUN export uid=27 gid=27 && \
-  echo "mysql:x:${uid}:${gid}:MariaDB Server:/var/lib/mysql:/sbin/nologin" >> /etc/passwd && \
-  echo "mysql:x:${uid}:" >> /etc/group
 
 CMD /usr/bin/mysqld_safe
