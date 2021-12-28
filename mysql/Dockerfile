@@ -6,7 +6,7 @@ RUN yum update -y && \
     wget
 
 # Retrieve MariaDB repo GPG key.
-RUN wget https://downloads.mariadb.com/MariaDB/MariaDB-Server-GPG-KEY > /etc/pki/rpm-gpg/MariaDB-Server-GPG-KEY
+RUN wget -O /etc/pki/rpm-gpg/MariaDB-Server-GPG-KEY https://downloads.mariadb.com/MariaDB/MariaDB-Server-GPG-KEY
 
 # Copy over MariaDB repo file.
 COPY mariadb.repo /etc/yum.repos.d/
