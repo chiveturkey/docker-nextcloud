@@ -7,7 +7,7 @@ done < ../etc/nextcloud.config
 
 # Set default values if variables not present.
 nextcloud_url="${nextcloud_url:-nextcloud.test}"
-nextcloud_version="${nextcloud_version:-16.0.3}"
+nextcloud_version="${nextcloud_version:-21.0.7}"
 
 # Create self-signed SSL certs.
 openssl req \
@@ -77,10 +77,11 @@ docker exec docker-nextcloud-nextcloud bash -c " \
   sed -i '$ d' /var/www/html/nextcloud/config/config.php \
   && echo \"  'memcache.locking' => '\OC\Memcache\Redis',\" >> /var/www/html/nextcloud/config/config.php \
   && echo \"  'memcache.local' => '\OC\Memcache\Redis',\"   >> /var/www/html/nextcloud/config/config.php \
-  && echo \"    'redis' => array(\"                         >> /var/www/html/nextcloud/config/config.php \
-  && echo \"      'host' => 'docker-nextcloud-redis',\"     >> /var/www/html/nextcloud/config/config.php \
-  && echo \"      'port' => 6379,\"                         >> /var/www/html/nextcloud/config/config.php \
-  && echo \"    ),\"                                        >> /var/www/html/nextcloud/config/config.php \
+  && echo \"  'redis' => array(\"                           >> /var/www/html/nextcloud/config/config.php \
+  && echo \"    'host' => 'docker-nextcloud-redis',\"       >> /var/www/html/nextcloud/config/config.php \
+  && echo \"    'port' => 6379,\"                           >> /var/www/html/nextcloud/config/config.php \
+  && echo \"  ),\"                                          >> /var/www/html/nextcloud/config/config.php \
+  && echo \"  'default_phone_region' => 'US',\"             >> /var/www/html/nextcloud/config/config.php \
   && echo \");\"                                            >> /var/www/html/nextcloud/config/config.php"
 
 # Setup external storage mount if 'use_external_storage' is 'true'.
