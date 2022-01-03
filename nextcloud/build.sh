@@ -7,7 +7,7 @@ done < ../etc/nextcloud.config
 
 # Set default values if variables not present.
 nextcloud_url="${nextcloud_url:-nextcloud.test}"
-nextcloud_version="${nextcloud_version:-16.0.3}"
+nextcloud_version="${nextcloud_version:-21.0.7}"
 
 # Create self-signed SSL certs.
 openssl req \
