@@ -1,16 +1,15 @@
-FROM centos:7
+FROM rockylinux:9.1
 
 ARG nextcloud_url
 ARG nextcloud_version
 
-# Update and install some useful packages.
-RUN yum update -y && \
-  yum install -y bzip2 \
-    centos-release-scl \
+# Install some useful packages, and install missing localhost.crt
+RUN dnf install -y bzip2 \
     httpd \
     mod_ssl \
     sudo \
-    wget
+    wget \
+    && /usr/libexec/httpd-ssl-gencerts
 
 # Create default vhost content.
 RUN mkdir /var/www/html/default
@@ -26,27 +25,28 @@ RUN sed -i "s/nextcloud.test/$nextcloud_url/" /etc/httpd/conf.d/nextcloud.conf
 COPY $nextcloud_url.crt /etc/pki/tls/certs
 COPY $nextcloud_url.key /etc/pki/tls/private
 
-# Install and configure PHP.
-RUN yum install -y rh-php73 \
-  rh-php73-php \
-  rh-php73-php-bcmath \
-  rh-php73-php-gd \
-  rh-php73-php-gmp \
-  rh-php73-php-imagick \
-  rh-php73-php-intl \
-  rh-php73-php-mbstring \
-  rh-php73-php-mysqlnd \
-  rh-php73-php-opcache \
-  rh-php73-php-pecl-apcu \
-  rh-php73-php-pecl-redis \
-  && ln -s /opt/rh/httpd24/root/etc/httpd/conf.d/rh-php73-php.conf /etc/httpd/conf.d/ \
-  && ln -s /opt/rh/httpd24/root/etc/httpd/conf.modules.d/15-rh-php73-php.conf /etc/httpd/conf.modules.d/ \
-  && ln -s /opt/rh/httpd24/root/etc/httpd/modules/librh-php73-php7.so /etc/httpd/modules/ \
-  && ln -s /opt/rh/rh-php73/root/bin/php /usr/bin/php \
-  && sed -i -e 's/memory_limit = 128M/memory_limit = 512M/'                                /etc/opt/rh/rh-php73/php.ini \
-  && sed -i -e 's/opcache.max_accelerated_files=4000/opcache.max_accelerated_files=10000/' /etc/opt/rh/rh-php73/php.d/10-opcache.ini \
-  && sed -i -e 's/;opcache.save_comments=1/opcache.save_comments=1/'                       /etc/opt/rh/rh-php73/php.d/10-opcache.ini \
-  && sed -i -e 's/;opcache.revalidate_freq=2/opcache.revalidate_freq=1/'                   /etc/opt/rh/rh-php73/php.d/10-opcache.ini
+# Install EPEL and Remi, and then install and configure PHP.
+RUN dnf install -y \
+  https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm \
+  https://dl.fedoraproject.org/pub/epel/epel-next-release-latest-9.noarch.rpm \
+  && dnf install -y dnf-utils http://rpms.remirepo.net/enterprise/remi-release-9.rpm \
+  && dnf install -y php81-php \
+  php81-php-bcmath \
+  php81-php-gd \
+  php81-php-gmp \
+  php81-php-intl \
+  php81-php-mbstring \
+  php81-php-mysqlnd \
+  php81-php-opcache \
+  php81-php-pecl-apcu \
+  php81-php-pecl-imagick-im7 \
+  php81-php-pecl-redis5 \
+  php81-php-pecl-zip \
+  php81-php-process \
+  && sed -i -e 's/memory_limit = 128M/memory_limit = 512M/' /etc/opt/remi/php81/php.ini \
+  && sed -i -e 's/;opcache.save_comments=1/opcache.save_comments=1/'                       /etc/opt/remi/php81/php.d/10-opcache.ini \
+  && sed -i -e 's/;opcache.revalidate_freq=2/opcache.revalidate_freq=1/'                   /etc/opt/remi/php81/php.d/10-opcache.ini \
+  && ln -s /usr/bin/php81 /usr/bin/php
 
 # Install Nextcloud.
 RUN wget -nv https://download.nextcloud.com/server/releases/nextcloud-$nextcloud_version.tar.bz2 \
@@ -63,4 +63,9 @@ RUN wget -nv https://download.nextcloud.com/server/releases/nextcloud-$nextcloud
   && mkdir /nextcloud \
   && chown -R apache:apache /nextcloud
 
-CMD /usr/sbin/httpd -DFOREGROUND
+# Add run.sh to enable both php-fpm and Apache to run simultaneously.
+COPY run.sh /run.sh
+# TODO: Do I need this, since the source file is already executable?
+RUN chmod 755 /run.sh
+
+CMD /run.sh
