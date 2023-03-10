@@ -17,6 +17,16 @@ docker exec docker-nextcloud-nextcloud bash -c " \
   && ln -s /nextcloud/config /var/www/html/nextcloud/config \
   && ln -s /nextcloud/data /var/www/html/nextcloud/data"
 
+  # Create initial config.php, and allow local symlinks.
+  docker exec docker-nextcloud-nextcloud bash -c "
+    cat << EOF > /nextcloud/config/config.php
+  <?php
+  \\\$CONFIG = array (
+    'localstorage.allowsymlinks' => true,
+  );
+  EOF"
+  docker exec docker-nextcloud-nextcloud bash -c "chown apache:apache /nextcloud/config/config.php"
+
 # Nextcloud configuration settings.
 docker exec docker-nextcloud-nextcloud sudo -u apache php /var/www/html/nextcloud/occ maintenance:install --database 'mysql' --database-host 'docker-nextcloud-mysql' --database-name 'nextcloud' --database-user 'nextcloud' --database-pass $mysql_nextcloud_password --admin-user $nextcloud_admin_user --admin-pass $nextcloud_admin_password --data-dir '/var/www/html/nextcloud/data'
 docker exec docker-nextcloud-nextcloud sudo -u apache php /var/www/html/nextcloud/occ config:system:set trusted_domains 1 --value=$nextcloud_url
