@@ -6,7 +6,8 @@ do
 done < ../etc/nextcloud.config
 
 # Get `docker-nextcloud-nextcloud` IP.
-docker_nextcloud_nextcloud_ip=$(podman container inspect docker-nextcloud-nextcloud | jq '.[].NetworkSettings.Networks.nextcloud.IPAddress')
+docker_nextcloud_nextcloud_ip=$(podman container inspect docker-nextcloud-nextcloud \
+                                | jq -r '.[].NetworkSettings.Networks.nextcloud.IPAddress')
 
 # Add nextcloud user with IP.
 docker exec \
