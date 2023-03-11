@@ -18,6 +18,7 @@ openssl req \
   -days 3650 \
   -nodes \
   -subj "/C=US/ST=Denial/L=Springfield/O=Dis/CN=$nextcloud_url" \
+  -addext "subjectAltName=DNS:$nextcloud_url" \
   -out $nextcloud_url.crt \
   -keyout $nextcloud_url.key \
   && chmod 600 $nextcloud_url.crt $nextcloud_url.key
