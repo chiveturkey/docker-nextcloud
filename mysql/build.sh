@@ -62,16 +62,6 @@ docker exec \
         GRANT ALL ON nextcloud.* TO 'nextcloud'@'docker-nextcloud-nextcloud'; \
         GRANT USAGE ON *.* TO 'nextcloud'@'docker-nextcloud-nextcloud';"
 
-# Stop mysql server.
-docker exec -it docker-nextcloud-mysql /usr/bin/mysqladmin -u root --password=$mysql_root_password shutdown
-
-# TODO: HACKTAG: There's some sort of race condition that causes this to fail if it executes too
-# soon.  It would be better to watch output from `docker ps` or something.
-sleep 5
-
-# Enable mysql server.
-docker container start docker-nextcloud-mysql
-
 # Get `nextcloud` network IP range, and wildcard the last octet.  Ex: If the `nextcloud` network is
 # `10.1.1.0/24`, then this will return `10.1.1.%`.
 docker_nextcloud_nextcloud_ip=$(podman network inspect nextcloud \
@@ -84,3 +74,13 @@ docker exec \
     -e "CREATE USER 'nextcloud'@'$docker_nextcloud_nextcloud_ip' IDENTIFIED BY '$mysql_nextcloud_password'; \
         GRANT ALL ON nextcloud.* TO 'nextcloud'@'$docker_nextcloud_nextcloud_ip'; \
         GRANT USAGE ON *.* TO 'nextcloud'@'$docker_nextcloud_nextcloud_ip';"
+
+# Stop mysql server.
+docker exec -it docker-nextcloud-mysql /usr/bin/mysqladmin -u root --password=$mysql_root_password shutdown
+
+# TODO: HACKTAG: There's some sort of race condition that causes this to fail if it executes too
+# soon.  It would be better to watch output from `docker ps` or something.
+sleep 5
+
+# Enable mysql server.
+docker container start docker-nextcloud-mysql
