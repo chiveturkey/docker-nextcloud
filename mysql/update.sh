@@ -12,7 +12,7 @@ done < ../etc/nextcloud.config
 
 # Build docker-nextcloud-mysql image.
 docker build \
-  --no-cache -t docker-nextcloud-mysql .
+  -t docker-nextcloud-mysql .
 
 # Enable mysql server.
 docker run \

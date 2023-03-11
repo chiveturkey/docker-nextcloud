@@ -18,7 +18,7 @@ nextcloud_version="${nextcloud_version:-16.0.3}"
 docker build \
   --build-arg nextcloud_url=$nextcloud_url \
   --build-arg nextcloud_version=$nextcloud_version \
-  --no-cache -t docker-nextcloud-nextcloud .
+  -t docker-nextcloud-nextcloud .
 
 # Setup external storage mount if 'use_external_storage' is 'true'.
 if [ "$use_external_storage" = 'true' ]; then

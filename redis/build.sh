@@ -6,7 +6,7 @@ do
 done < ../etc/nextcloud.config
 
 docker build \
-  --no-cache -t docker-nextcloud-redis .
+  -t docker-nextcloud-redis .
 
 # TODO: HACKTAG: There's some sort of race condition that causes this to fail if it executes too
 # soon.  It would be better to watch output from `docker image ls` or something.

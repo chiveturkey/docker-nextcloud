@@ -27,7 +27,7 @@ openssl req \
 docker build \
   --build-arg nextcloud_url=$nextcloud_url \
   --build-arg nextcloud_version=$nextcloud_version \
-  --no-cache -t docker-nextcloud-nextcloud .
+  -t docker-nextcloud-nextcloud .
 
 # Build docker-nextcloud-nextcloud volume.
 docker volume create docker-nextcloud-nextcloud

@@ -7,7 +7,7 @@ done < ../etc/nextcloud.config
 
 # Build docker-nextcloud-mysql image.
 docker build \
-  --no-cache -t docker-nextcloud-mysql .
+  -t docker-nextcloud-mysql .
 
 # Build docker-nextcloud-mysql volume.
 docker volume create docker-nextcloud-mysql
