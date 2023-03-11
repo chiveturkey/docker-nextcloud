@@ -20,16 +20,8 @@ cd redis
 
 # Create mysql image.
 cd ../mysql
-./build1.sh
+./build.sh
 
 # Create nextcloud image.
 cd ../nextcloud
-./build1.sh
-
-# Create mysql image.
-cd ../mysql
-./build2.sh
-
-# Create nextcloud image.
-cd ../nextcloud
-./build2.sh
+./build.sh

@@ -71,3 +71,16 @@ sleep 5
 
 # Enable mysql server.
 docker container start docker-nextcloud-mysql
+
+# Get `nextcloud` network IP range, and wildcard the last octet.  Ex: If the `nextcloud` network is
+# `10.1.1.0/24`, then this will return `10.1.1.%`.
+docker_nextcloud_nextcloud_ip=$(podman network inspect nextcloud \
+                                | jq -r '.[].subnets[].gateway' \
+                                | sed 's/1$/%/')
+
+# Add nextcloud user with IP.
+docker exec \
+  docker-nextcloud-mysql /usr/bin/mysql -u root --password=$mysql_root_password \
+    -e "CREATE USER 'nextcloud'@'$docker_nextcloud_nextcloud_ip' IDENTIFIED BY '$mysql_nextcloud_password'; \
+        GRANT ALL ON nextcloud.* TO 'nextcloud'@'$docker_nextcloud_nextcloud_ip'; \
+        GRANT USAGE ON *.* TO 'nextcloud'@'$docker_nextcloud_nextcloud_ip';"
