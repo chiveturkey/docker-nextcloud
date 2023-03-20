@@ -29,3 +29,11 @@ nmcli connection modify enp1s0 +ipv4.addresses "192.168.100.1/24"
 ```
 ./build.sh
 ```
+
+## Podman Storage Considerations
+
+If using Podman instead of Docker and further running 1) in non-root mode and 2) with SELinux Enforcing, then you have to do some extra work for external storage permissions.  First, you need the mapped `uid` for your user inside of the Podman container and second, you need to set the SELinux context on the mount.  Example:
+
+```
+//192.168.100.1/files    /nas/files                                 cifs    credentials=/root/.smbcredentials,uid=100001,gid=1000,context="system_u:object_r:container_file_t:s0",noauto 0 0
+```
