@@ -1,0 +1,2 @@
+*/5 * * * * username docker exec docker-nextcloud-nextcloud sudo -u apache php -f /var/www/html/nextcloud/cron.php
+0 1 * * * username docker exec docker-nextcloud-nextcloud sudo -u apache php /var/www/html/nextcloud/occ files:scan --all

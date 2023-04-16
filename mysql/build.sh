@@ -7,7 +7,7 @@ done < ../etc/nextcloud.config
 
 # Build docker-nextcloud-mysql image.
 docker build \
-  --no-cache -t docker-nextcloud-mysql .
+  -t docker-nextcloud-mysql .
 
 # Build docker-nextcloud-mysql volume.
 docker volume create docker-nextcloud-mysql
@@ -58,9 +58,22 @@ docker exec \
 docker exec \
   docker-nextcloud-mysql /usr/bin/mysql -u root --password=$mysql_root_password \
     -e "CREATE DATABASE nextcloud; \
-        CREATE USER 'nextcloud'@'docker-nextcloud-nextcloud.nextcloud' IDENTIFIED BY '$mysql_nextcloud_password'; \
-        GRANT ALL ON nextcloud.* TO 'nextcloud'@'docker-nextcloud-nextcloud.nextcloud'; \
-        GRANT USAGE ON *.* TO 'nextcloud'@'docker-nextcloud-nextcloud.nextcloud';"
+        CREATE USER 'nextcloud'@'docker-nextcloud-nextcloud' IDENTIFIED BY '$mysql_nextcloud_password'; \
+        GRANT ALL ON nextcloud.* TO 'nextcloud'@'docker-nextcloud-nextcloud'; \
+        GRANT USAGE ON *.* TO 'nextcloud'@'docker-nextcloud-nextcloud';"
+
+# Get `nextcloud` network IP range, and wildcard the last octet.  Ex: If the `nextcloud` network is
+# `10.1.1.0/24`, then this will return `10.1.1.%`.
+docker_nextcloud_nextcloud_ip=$(podman network inspect nextcloud \
+                                | jq -r '.[].subnets[].gateway' \
+                                | sed 's/1$/%/')
+
+# Add nextcloud user with IP.
+docker exec \
+  docker-nextcloud-mysql /usr/bin/mysql -u root --password=$mysql_root_password \
+    -e "CREATE USER 'nextcloud'@'$docker_nextcloud_nextcloud_ip' IDENTIFIED BY '$mysql_nextcloud_password'; \
+        GRANT ALL ON nextcloud.* TO 'nextcloud'@'$docker_nextcloud_nextcloud_ip'; \
+        GRANT USAGE ON *.* TO 'nextcloud'@'$docker_nextcloud_nextcloud_ip';"
 
 # Stop mysql server.
 docker exec -it docker-nextcloud-mysql /usr/bin/mysqladmin -u root --password=$mysql_root_password shutdown
