@@ -1,8 +1,0 @@
-# Derived from mariadb_repo_setup.  See
-# https://mariadb.com/resources/blog/installing-mariadb-10-on-centos-7-rhel-7/
-[mariadb-main]
-name = MariaDB Server
-baseurl = https://dlm.mariadb.com/repo/mariadb-server/10.6/yum/rhel/7/x86_64
-gpgkey = file:///etc/pki/rpm-gpg/MariaDB-Server-GPG-KEY
-gpgcheck = 1
-enabled = 1

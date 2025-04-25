@@ -1,11 +1,10 @@
-FROM centos:7
+FROM rockylinux:9.1
 
 # Update and install some useful packages.
-RUN yum install epel-release -y \
-  && yum update -y \
-  && yum install -y redis
+RUN dnf update -y \
+  && dnf install -y redis
 
-RUN sed -i 's/^bind/#bind/' /etc/redis.conf \
-  && sed -i 's/^protected-mode yes/protected-mode no/' /etc/redis.conf
+RUN sed -i 's/^bind/#bind/' /etc/redis/redis.conf \
+  && sed -i 's/^protected-mode yes/protected-mode no/' /etc/redis/redis.conf
 
-CMD /usr/bin/redis-server /etc/redis.conf
+CMD /usr/bin/redis-server /etc/redis/redis.conf
