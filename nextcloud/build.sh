@@ -93,6 +93,7 @@ docker exec docker-nextcloud-nextcloud bash -c " \
   && echo \"    'port' => 6379,\"                           >> /var/www/html/nextcloud/config/config.php \
   && echo \"  ),\"                                          >> /var/www/html/nextcloud/config/config.php \
   && echo \"  'default_phone_region' => 'US',\"             >> /var/www/html/nextcloud/config/config.php \
+  && echo \"  'maintenance_window_start' => 4,\"            >> /var/www/html/nextcloud/config/config.php \
   && echo \");\"                                            >> /var/www/html/nextcloud/config/config.php"
 
 # Setup external storage mount if 'use_external_storage' is 'true'.
