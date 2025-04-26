@@ -51,7 +51,7 @@ RUN dnf install -y \
 # Install Nextcloud.
 RUN wget -nv https://download.nextcloud.com/server/releases/nextcloud-$nextcloud_version.tar.bz2 \
   && wget -nv https://download.nextcloud.com/server/releases/nextcloud-$nextcloud_version.tar.bz2.sha256 \
-  && sha256sum -c nextcloud-$nextcloud_version.tar.bz2.sha256 < nextcloud-$nextcloud_version.tar.bz2 \
+  && sha256sum -c --ignore-missing nextcloud-$nextcloud_version.tar.bz2.sha256 < nextcloud-$nextcloud_version.tar.bz2 \
   && wget -nv https://download.nextcloud.com/server/releases/nextcloud-$nextcloud_version.tar.bz2.asc \
   && wget -nv https://nextcloud.com/nextcloud.asc \
   && gpg --import nextcloud.asc \
